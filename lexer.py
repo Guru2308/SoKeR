@@ -1,3 +1,5 @@
+#Lexer performs Lexical Analysis => tokenization  of inputs
+
 class Lexer:
     digits = '1234567890'
     operations = '+-/*%N'
