@@ -18,5 +18,4 @@ while True:
     # Interpretation
     interpreter = Interpreter(tree,db)
     result = interpreter.interpret()
-
     print(result)
