@@ -1,5 +1,5 @@
 #Lexer performs Lexical Analysis => tokenization  of inputs
-from tokens import Integer, Float, Operation, Declartion, Variable, Boolean
+from tokens import Integer, Float, Operation, Declartion, Variable, Boolean, Comparison, Reserved
 class Lexer:
     digits = '1234567890'
     operations = '+-/*()='
@@ -7,6 +7,9 @@ class Lexer:
     letters = 'qwertyuiopasdfghjklzxcvbnm'
     declarations = ["make"]         
     boolean = ["and", "or", "not"]
+    comparison = [">","<",">=","<=","?="]
+    specialCharacters = "><=?"
+    reserved = ["if", "elif", "else", "do"]
 
     def __init__ (self, text):
         self.text = text
@@ -37,8 +40,19 @@ class Lexer:
                 elif word in Lexer.boolean:
                     self.token = Boolean(word)
 
+                elif word in Lexer.reserved:
+                    self.token = Reserved(word)
+                    
                 else:
                     self.token = Variable(word)
+
+            elif self.char in Lexer.specialCharacters:
+                comparisonOperator = ''
+                while self.char in Lexer.specialCharacters and self.idx < len(self.text):
+                    comparisonOperator += self.char
+                    self.move()
+
+                self.token = Comparison(comparisonOperator)
 
             self.tokens.append(self.token)
         return self.tokens

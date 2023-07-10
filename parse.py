@@ -9,14 +9,19 @@ class Parser:
             return self.token
         elif self.token.value == "(":
             self.move()
-            expression = self.expression()
+            expression = self.boolean_expression()
             return expression
+        elif self.token == "not":
+            operator = self.token
+            self.move()
+            operand = self.token
+            return [operator, self.boolean_expression]
         elif self.token.type.startswith("VAR"):
             return self.token
         elif self.token.value == "+" or self.token.value == "-":
             operator = self.token
             self.move()
-            operand = self.factor()
+            operand = self.boolean_expression()
 
             return [operator, operand]
         
@@ -32,12 +37,42 @@ class Parser:
         
         return left_node
     
-    def boolean_expression(self):
+    def if_statements(self):
+        condn = []
+        actions = []
+        if_statement = self.if_statement()
+
+        condn.append(if_statement[0])
+        actions.append(if_statement[1])
+
+        while self.token.value == "elif":
+            if_statement = self.if_statement()
+            condn.append(if_statement[0])
+            actions.append(if_statement[1])
+
+        if self.token.value == "else":
+            self.move()
+            self.move()
+            else_action = self.statement()
+
+            return [condn, actions, else_action]
+    
+    def comp_expression(self):
         left_node = self.expression()
-        while self.token.type =="BOOL":
+        while self.token.type =="COMP":
             operation = self.token
             self.move()
             right_node = self.expression()
+            left_node = [left_node, operation, right_node]
+        
+        return left_node
+    
+    def boolean_expression(self):
+        left_node = self.comp_expression()
+        while self.token.type =="BOOL":
+            operation = self.token
+            self.move()
+            right_node = self.comp_expression()
             left_node = [left_node, operation, right_node]
         
         return left_node
@@ -68,8 +103,11 @@ class Parser:
 
                 return [left_node, operation, right_node]
 
-        elif self.token.type == "INT" or self.token.type == "FLOAT" or self.token.type == "OP":
+        elif self.token.type == "INT" or self.token.type == "FLOAT" or self.token.type == "OP" or self.token.type == "not":
             return self.boolean_expression()
+        
+        elif self.token == "if":
+            return [self.token, self.if_statements()]
 
     def parse(self):
         return self.statement()
