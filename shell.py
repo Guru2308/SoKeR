@@ -2,11 +2,14 @@ from lexer import Lexer
 from parse import Parser
 from interpreter import Interpreter
 from data import Data
+import streamlit as st
 
 db = Data()
+text = st.text_input("Soker") 
+print(text)
 
 while True:
-    text = input('SoKeR: ')
+    text = input("SoKeR: ")    
 
     #Lexical Analysis
     tokenizer = Lexer(text)

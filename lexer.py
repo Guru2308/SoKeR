@@ -1,11 +1,12 @@
 #Lexer performs Lexical Analysis => tokenization  of inputs
-from tokens import Integer, Float, Operation, Declartion, Variable
+from tokens import Integer, Float, Operation, Declartion, Variable, Boolean
 class Lexer:
     digits = '1234567890'
     operations = '+-/*()='
     stop_words = [" "]
     letters = 'qwertyuiopasdfghjklzxcvbnm'
-    declarations = ["make"]
+    declarations = ["make"]         
+    boolean = ["and", "or", "not"]
 
     def __init__ (self, text):
         self.text = text
@@ -32,6 +33,10 @@ class Lexer:
 
                 if word in Lexer.declarations:
                     self.token = Declartion(word)
+
+                elif word in Lexer.boolean:
+                    self.token = Boolean(word)
+
                 else:
                     self.token = Variable(word)
 

@@ -25,3 +25,7 @@ class Declartion(Token):
 class Variable(Token):
     def __init__ (self, value):
         super().__init__("VAR(?)",value)
+
+class Boolean(Token):
+    def __init__ (self, value):
+        super().__init__("BOOL",value)

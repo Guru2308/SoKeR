@@ -13,6 +13,12 @@ class Parser:
             return expression
         elif self.token.type.startswith("VAR"):
             return self.token
+        elif self.token.value == "+" or self.token.value == "-":
+            operator = self.token
+            self.move()
+            operand = self.factor()
+
+            return [operator, operand]
         
     def term(self):
         left_node = self.factor()
@@ -22,6 +28,16 @@ class Parser:
             self.move()
             right_node = self.factor()
             self.move()
+            left_node = [left_node, operation, right_node]
+        
+        return left_node
+    
+    def boolean_expression(self):
+        left_node = self.expression()
+        while self.token.type =="BOOL":
+            operation = self.token
+            self.move()
+            right_node = self.expression()
             left_node = [left_node, operation, right_node]
         
         return left_node
@@ -48,12 +64,12 @@ class Parser:
             if self.token.value == "=":
                 operation = self.token
                 self.move()
-                right_node = self.expression()
+                right_node = self.boolean_expression()
 
                 return [left_node, operation, right_node]
 
         elif self.token.type == "INT" or self.token.type == "FLOAT" or self.token.type == "OP":
-            return self.expression()
+            return self.boolean_expression()
 
     def parse(self):
         return self.statement()
