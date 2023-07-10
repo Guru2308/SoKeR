@@ -9,7 +9,7 @@ class Lexer:
     boolean = ["and", "or", "not"]
     comparison = [">","<",">=","<=","?="]
     specialCharacters = "><=?"
-    reserved = ["if", "elif", "else", "do"]
+    reserved = ["if", "elif", "else", "do", "while"]
 
     def __init__ (self, text):
         self.text = text
@@ -42,7 +42,7 @@ class Lexer:
 
                 elif word in Lexer.reserved:
                     self.token = Reserved(word)
-                    
+
                 else:
                     self.token = Variable(word)
 

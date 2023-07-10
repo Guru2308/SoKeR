@@ -10,12 +10,13 @@ while True:
     #Lexical Analysis
     tokenizer = Lexer(text)
     tokens = tokenizer.tokenize()
-    print(tokens)
+
     #Parsing
     parser = Parser(tokens)
     tree = parser.parse() 
-    print(tree)
+
     # Interpretation
     interpreter = Interpreter(tree,db)
     result = interpreter.interpret()
-    print(result)
+    if result is not None:
+        print(result)
