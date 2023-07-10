@@ -18,5 +18,6 @@ while True:
     # Interpretation
     interpreter = Interpreter(tree,db)
     result = interpreter.interpret()
+    
     if result is not None:
         print(result)
